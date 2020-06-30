@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities
+END
+Rank.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Rank.php
+END
+TempPasswordReset.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/TempPasswordReset.php
+END
+UserActivity.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/UserActivity.php
+END
+Activity.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Activity.php
+END
+Foodtypes.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Foodtypes.php
+END
+Foodcategories.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Foodcategories.php
+END
+User.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/User.php
+END
+TempEmailVerification.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/TempEmailVerification.php
+END
+Review.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Review.php
+END
+Supplytypes.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Supplytypes.php
+END
+Supplycategories.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Supplycategories.php
+END
+PaypalProfile.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/PaypalProfile.php
+END
+Measurements.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/stockupfood/!svn/ver/65/branches/stockupfoodv2_wordpress/app/app/Entities/Measurements.php
+END

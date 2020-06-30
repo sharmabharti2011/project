@@ -1,0 +1,136 @@
+<?php
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+
+
+$api = $app['controllers_factory'];
+
+$api->before($checkAPIToken);
+
+$api->after(function (Request $request, Response $response) {
+    $response->headers->set('Access-Control-Allow-Origin', '*');
+});
+
+$api->post('/sign-up', function(Request $request) use ($app) {
+    //get user details and pass to render
+
+    $errors = array();
+
+    if($request->request->get('username') == null){
+        $errors['username'] = 'user name is required';
+    }
+    if($request->request->get('password') == null){
+        $errors['password'] = 'Password is required';
+    }else if(strlen($request->request->get('password')) < 6){
+        $errors['password'] = 'Password should have at least 6 characters';        
+    }
+    if($request->request->get('name') == null){
+        $errors['name'] = 'Name is required';
+    }else if(strlen($request->request->get('name')) < 3){
+        $errors['name'] = 'Name should have at least 3 characters';
+    }
+    if($request->request->get('email') == null){
+        $errors['email'] = 'Email is required';
+    }else if(!preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^",$request->request->get('email'))){
+        $errors['email'] = 'Email is invalid';
+    }
+    if($request->request->get('adults') == null){
+        $errors['adults'] = 'Adults is required';
+    }
+    if($request->request->get('children') == null){
+        $errors['children'] = 'Children is required';
+    }
+    if($request->request->get('goal') == null){
+        $errors['goal'] = 'Goal is required';
+    }
+
+    if(!empty($errors)){
+        return $app->json($errors, 401, array('Content-Type' => 'application/json'));
+    }
+
+    $user = array(
+        'username' => $request->request->get('username'),
+        'password' => md5($request->request->get('password')),
+        'name' => $request->request->get('name'),
+        'email' => $request->request->get('email'),
+        'adults' => $request->request->get('adults'),
+        'children' => $request->request->get('children'),
+        'goal' => $request->request->get('goal')
+    );
+
+    $token = bin2hex(openssl_random_pseudo_bytes(100));
+
+    $user['customerToken'] = $token;
+
+    $user = UserUtils::createUser($app, $user);  
+
+    if ($user == "email") {
+        return $app->json(array('success'=>false,'email'=>'email already exist'), 404, array('Content-Type' => 'application/json'));
+    }else if($user == "username"){
+        return $app->json(array('success'=>false,'user_name'=>'User na already exist'), 404, array('Content-Type' => 'application/json'));
+    }else {
+        $userarray = array(
+            'username' => $user->getUsername(),
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'adults' => $user->getAdults(),
+            'children' => $user->getChildren(),
+            'goal' => $user->getGoal()
+        );
+        return $app->json(array('success'=>true,'user'=>$userarray,'token'=>$user->getCustomerToken()), 200, array('Content-Type' => 'application/json'));
+    }
+   
+});
+
+
+$api->post('/sign-in', function (Request $request) use ($app) {
+    
+    $username = $request->request->get('username');
+    $password = md5($request->request->get('password'));
+
+
+
+    //$user = UserUtils::loginUser($app, $username, $password);
+
+    $query = $app['orm.em']->createQuery('SELECT u FROM Entities\User u where (u.userName = :name OR u.email = :email) and u.password = :password');
+        $query->setParameters(array(
+            'name' => $username,
+            'email' => $username,
+            'password' => $password,
+        ));
+        try {
+            $user = $query->getSingleResult();
+
+            $user->setLastLoggedIn(date('Ymd'));
+            $user->setTimesLoggedIn($user->getTimesLoggedIn()+1);
+            $app['orm.em']->persist($user);
+            $app['orm.em']->flush();
+            // error_log(print_r($user->getId(), TRUE), 0);
+        } catch (Doctrine\ORM\NoResultException $e) {
+             return $app->json(array('success'=>false,'message'=>'Invalid credentails!'), 404, array('Content-Type' => 'application/json'));
+        }
+
+         $token = bin2hex(openssl_random_pseudo_bytes(100));
+         $user->setCustomerToken($token);
+         $app['orm.em']->persist($user);
+         $app['orm.em']->flush();
+        
+         $userarray = array(
+            'username' => $user->getUsername(),
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'adults' => $user->getAdults(),
+            'children' => $user->getChildren(),
+            'goal' => $user->getGoal()
+        );
+        return $app->json(array('success'=>true,'user'=>$userarray,'token'=>$user->getCustomerToken()), 200, array('Content-Type' => 'application/json'));
+
+});
+
+
+
+return $api;
+?>
